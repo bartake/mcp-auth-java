@@ -15,7 +15,7 @@ Java 17 + Maven port of [`mcp-auth-example`](../mcp-auth-example) (Node): mock l
 
 ## Prerequisites
 
-- **JDK 17+**
+- **JDK 17+** (Temurin or any compliant distribution)
 - **Maven:** Not required on `PATH`. This repo includes the **Maven Wrapper** (`mvnw` / `mvnw.cmd`); the first run downloads Maven **3.9.9** into your user `.m2/wrapper` cache.
 
 ## Tests and coverage
