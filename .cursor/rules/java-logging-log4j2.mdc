@@ -1,0 +1,16 @@
+---
+description: Java logging — SLF4J API with Apache Log4j 2 implementation
+globs: "**/*.java"
+alwaysApply: false
+---
+
+# Logging: SLF4J + Log4j 2
+
+- **API**: Use **SLF4J** (`org.slf4j.Logger`, `LoggerFactory.getLogger(Class<?>)`) for all application logging. Do not use JUL or `System.out` in production paths.
+- **Implementation**: Use **Apache Log4j 2.x** (not Log4j 1, which is EOL). Stay on the latest **2.x** patch release to pick up security fixes (e.g. post–Log4Shell hardening).
+- **Spring Boot**: Prefer `spring-boot-starter-log4j2` and **exclude** the default Logback starter from starters that pull in `spring-boot-starter-logging` (e.g. exclude `spring-boot-starter-logging` from `spring-boot-starter-web`). Provide `log4j2.xml` or `log4j2-spring.xml` under `src/main/resources`.
+- **Messages**: Use parameterized logging: `logger.info("User {} action {}", userId, action);`—avoid string concatenation and avoid logging full objects that may contain secrets.
+- **Levels**: `ERROR` for failures needing attention, `WARN` for recoverable issues, `INFO` for business-significant events, `DEBUG`/`TRACE` for diagnostics (often disabled in prod).
+- **Configuration**: Separate console vs file appenders by profile; avoid loading Log4j configuration from untrusted sources; do not enable risky lookup patterns from uncontrolled input.
+
+When adding a new Java module, wire logging through SLF4J and document any required Log4j2 dependencies in the module POM.

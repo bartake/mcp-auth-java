@@ -1,0 +1,16 @@
+---
+description: Security baseline — secrets, auth, dependencies, OWASP-oriented habits
+alwaysApply: true
+---
+
+# Security frameworks and practices
+
+- **Secrets**: Load from environment, a secrets manager, or vault—never hard-code API keys, JWT signing keys, DB passwords, or third-party tokens. Never commit `.env` with real values.
+- **Logging**: Do not log passwords, refresh tokens, full JWTs, payment card numbers, or raw session identifiers. Prefer opaque IDs and redaction.
+- **Auth**: Prefer established stacks (e.g. Spring Security, OAuth2/OIDC libraries) over bespoke crypto. Validate JWT **issuer**, **audience**, **signature**, and **expiry**; use short-lived access tokens where applicable.
+- **Input and data**: Validate at trust boundaries; use parameterized queries / ORM bindings; encode output for the context (HTML, JSON, etc.). Treat all client input as untrusted.
+- **Dependencies**: Pin versions where it matters; run **SCA** regularly (`npm audit`, Maven OWASP Dependency-Check, GitHub Dependabot). Upgrade promptly for known CVEs in frameworks and loggers.
+- **Transport and headers**: Use HTTPS in non-local environments; set security headers (CSP, HSTS, etc.) on web-facing services when you control the stack.
+- **Defense in depth**: Least privilege for service accounts and IAM; rate limiting and size limits on public APIs; fail closed on authorization errors.
+
+When adding features that touch identity, payments, or regulated data, align expectations with **OWASP ASVS** / **OWASP Top 10** and document threat assumptions briefly in PRs when non-trivial.

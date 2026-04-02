@@ -1,0 +1,19 @@
+---
+description: Java / Spring Boot conventions — layers, validation, transactions, security
+globs: "**/*.java"
+alwaysApply: false
+---
+
+# Java / Spring Boot
+
+- **Baseline**: Target **Spring Boot 3.x** with **Java 17+** and **`jakarta.*`** namespaces (not `javax.*` for Servlet/JPA/Validation APIs).
+- **Injection**: Prefer **constructor injection** over `@Autowired` fields. Keep beans focused; avoid giant `@Configuration` classes—split by feature.
+- **Web layer**: Keep **controllers thin** (HTTP mapping, status codes, validation trigger). Put orchestration and rules in **services**. Return **DTOs** or dedicated response types at the API boundary; avoid exposing JPA **entities** directly when they carry lazy relations or internal fields.
+- **Validation**: Use **Bean Validation** on request/command objects (`@NotNull`, `@Size`, etc.). Use `@Valid` on `@RequestBody` parameters; use `@Validated` on the controller/service class when you need method-level validation or groups.
+- **Transactions**: Put `@Transactional` on the **service** layer (not controllers). Use `readOnly = true` for query-only methods. Remember **self-invocation** on the same class bypasses the proxy—factor to another bean if needed.
+- **Configuration**: Prefer **`@ConfigurationProperties`** (typed, testable) over many scattered `@Value` injections. Externalize secrets via env vars or Spring Cloud / your secret store—never hard-code keys in `application.properties` committed to git.
+- **Security**: Prefer **Spring Security** for servlet apps: explicit **security filter chain**, least privilege, clear rules for **stateless JWT** vs session cookies. Do not disable **CSRF** for browser-facing forms without a documented alternative; for pure APIs, document why CSRF is omitted.
+- **Errors**: Use **`@ControllerAdvice`** (or `ResponseEntityExceptionHandler`) for consistent error bodies and HTTP status mapping. Do not leak stack traces or internal messages to clients in production.
+- **Testing**: Favor **slice tests** (`@WebMvcTest`, `@DataJpaTest`) over full **`@SpringBootTest`** when possible. Use **`@MockBean`** sparingly—prefer testing real wiring at the slice boundary.
+
+Align new code with existing module layout (multi-module Maven, package by feature vs layer—match the repo).
