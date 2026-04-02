@@ -79,3 +79,7 @@ java -jar agent/target/agent-1.0.0.jar alice pass123
 
 - User context uses **`ThreadLocal`** (`UserContextHolder`) per request instead of Node `AsyncLocalStorage`.
 - Same ports and JSON-RPC behavior for the demo agent.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
